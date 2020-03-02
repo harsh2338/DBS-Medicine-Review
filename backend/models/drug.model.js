@@ -42,4 +42,9 @@ db.authenticate()
 
 var drugModel = db.define('drug', modelDefinition);
 
+drugModel.sync().then( () => {
+    console.log("Tables synced");
+}).catch(err => {
+    console.log(err);
+});
 module.exports = drugModel;

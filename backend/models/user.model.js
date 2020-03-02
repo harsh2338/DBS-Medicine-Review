@@ -33,12 +33,9 @@ var modelOptions = {
                 if(error) {
                     return callback(error);
                 }
-        
                 return callback(null, isMatch);
             });
         }
-        ,
-        try_unite: try_unite
     },
     hooks: {
         beforeValidate: hashPassword
@@ -52,6 +49,12 @@ db.authenticate()
 
 // 3: Define the User model.
 var UserModel = db.define('user', modelDefinition, modelOptions);
+
+UserModel.sync().then( () => {
+    console.log("Tables synced");
+}).catch(err => {
+    console.log(err);
+});
 
 // Compares two passwords.
 function comparePasswords(password, callback) {
@@ -71,12 +74,6 @@ function hashPassword(user) {
             user.password = password;
         });
     }
-}
-
-function try_unite(password) {
-    if (this.password != password)
-        return 0;
-        else return 1;
 }
 
 module.exports = UserModel;

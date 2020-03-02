@@ -1,16 +1,23 @@
 'use strict';
 
 var drug = require('../models/drug.model');
+var seq = require('sequelize');
+
+var Op = seq.Op;
 
 exports.search = function(req, res, next) {
     var searchQuery = {
-        where: {'name' : req.query.name}
+        where: {
+            'name' : {
+                [Op.regexp] : '^' + req.query.name + '+'
+            }
+        }
     };
     if( !req.query ){
         req.status(403)
             .json("No search query");
     } else {
-        drug.findOne(searchQuery).then( deets => {
+        drug.findAll(searchQuery).then( deets => {
             if (!deets){
                 //console.log(deets);
                 //res.status(403).json("Not available");
