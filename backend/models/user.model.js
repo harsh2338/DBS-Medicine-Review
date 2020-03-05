@@ -4,7 +4,7 @@ var Sequelize = require('sequelize'),
     uid = require('uid-safe');
 
 var config = require('../config/config'),
-    db = require('../services/database'),
+    db = require('../services/database.sqlize'),
     bcrypt = require('bcrypt');
 
 // 1: The model schema.

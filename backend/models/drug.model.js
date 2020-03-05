@@ -1,8 +1,8 @@
 'use strict';
 
 var Sequelize = require('sequelize'),
-    db = require('../services/database'),
-    config = require('../config/config');
+    db = require('../services/database.sqlize'),
+    config = require('../config/db.config');
 
 var modelDefinition = {
     name : {

@@ -1,7 +1,7 @@
 'use strict';
 
 var drug = require('../models/drug.model');
-var db = require('../services/database');
+var db = require('../services/database.sqlize');
 
 exports.add = function(req, res, next) {
     db.sync().then( function() {

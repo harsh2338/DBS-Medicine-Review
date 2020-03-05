@@ -1,6 +1,7 @@
 'use strict';
 
 var config = module.exports;
+var config2 = module.exports;
 
 config.db = {
     user: 'root', 
@@ -13,3 +14,14 @@ config.db.details = {
     port: 3306,      
     dialect: 'mysql'
 };
+
+config2.db = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'sampledb'
+}
+
+config2.keys = {
+    secret: 'This is a secret string lmao'
+}
