@@ -20,20 +20,20 @@ export class SignInComponent implements OnInit {
   emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   serverErrorMessages: string;
   ngOnInit() {
-    // if(this.userService.isLoggedIn())
-    // this.router.navigateByUrl('/userprofile');
+     if(this.userService.isLoggedIn())
+     this.router.navigateByUrl('/profile');
   }
 
   onSubmit(form : NgForm){
-    // this.userService.login(form.value).subscribe(
-    //   res => {
-    //     this.userService.setToken(res['token']);
-    //     this.router.navigateByUrl('/userprofile');
-    //   },
-    //   err => {
-    //     this.serverErrorMessages = err.error.message;
-    //   }
-    // );
+    this.userService.login(form.value).subscribe(
+      res => {
+        this.userService.setToken(res['token']);
+        this.router.navigateByUrl('/profile');
+      },
+      err => {
+        this.serverErrorMessages = err.error.message;
+      }
+    );
   }
 
 }
