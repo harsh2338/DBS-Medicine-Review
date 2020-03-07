@@ -1,30 +1,124 @@
-<form #signUpForm="ngForm" (ngSubmit)="signUpForm.valid && onSubmit(signUpForm)">
-    <input type="text" #name="ngModel" [(ngModel)]="userService.selectedUser.name" name="name" placeholder="Full Name"
-    required  [ngClass]="{'invalid-textbox' :signUpForm.submitted && !name.valid }">
-    <div *ngIf="signUpForm.submitted && !name.valid">
-      <label class="validation-message">This field is required.</label>
-    </div>
-    <input type="text" #email="ngModel" [(ngModel)]="userService.selectedUser.email" name="email" placeholder="Email"
-    required [pattern]="emailRegex"  [ngClass]="{'invalid-textbox' :signUpForm.submitted && !email.valid }">
-    <div *ngIf="signUpForm.submitted && email.errors">
-      <label *ngIf="email.errors.required" class="validation-message">This field is required.</label>
-      <label *ngIf="email.errors.pattern" class="validation-message">Invalid email address.</label>
-    </div>
-    <input type="password" #password="ngModel" [(ngModel)]="userService.selectedUser.password" name="password" placeholder="Password"
-    minlength="4" required [ngClass]="{'invalid-textbox' :signUpForm.submitted && !password.valid }">
-    <div *ngIf="signUpForm.submitted && password.errors">
-      <label *ngIf="password.errors.required" class="validation-message">This field is required.</label>
-      <label *ngIf="password.errors.minlength" class="validation-message">Enter atleast 4 characters.</label>
-    </div>
-    <input type="submit" value="Sign Up">
+<mat-card class="signup-card" style="padding-top:5%">
+  <mat-card-title>Register User</mat-card-title>
+
+<mat-card-content>
+  <form class="basic-registration-form" [formGroup]="registerUserForm" >
+   
+    <fieldset class="form-group">
+      <mat-form-field class="example-full-width">
+        <input 
+        class="form-control"
+        formControlName="username"
+        type="text"
+        matInput placeholder="username" [(ngModel)]="username" name="username" required>
+        </mat-form-field>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <mat-form-field class="example-full-width">
+        <input 
+        class="form-control"
+        formControlName="password"
+        type="text"
+        matInput placeholder="Password" 
+        [(ngModel)]="password" 
+        name="password" required>          
+      </mat-form-field>
+      </fieldset>
+
+      <fieldset class="form-group">
+        <mat-form-field class="example-full-width">
+          <input 
+          class="form-control"
+          formControlName="email"
+          type="email"
+          matInput placeholder="Email" [(ngModel)]="email" name="email" required>
+          </mat-form-field>
+      </fieldset>
+      <button (click)="onSubmit()">SUBMIT</button>
   </form>
-  
-  <!-- Success message -->
-  <div class="success" *ngIf="showSucessMessage">
-    Saved successfully
-  </div>
-  
-  <!-- Error message -->
-  <div class="alert" *ngIf="serverErrorMessages">
-    {{serverErrorMessages}}
-  </div>
+
+
+  <form class="common-registration-form" [formGroup]="registerUserForm" >
+    <mat-card-title>DEETS@</mat-card-title>
+
+    <fieldset class="form-group">
+      <mat-form-field class="example-full-width">
+        <input 
+        class="form-control"
+        formControlName="name"
+        type="text"
+        matInput placeholder="Full Name" [(ngModel)]="name" name="name" required>
+        </mat-form-field>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <mat-form-field class="example-full-width">
+        <input 
+        class="form-control"
+        formControlName="ph_number"
+        matInput placeholder="ph_number" [(ngModel)]="ph_number" name="ph_number" required>
+        </mat-form-field>
+    </fieldset>
+     
+       
+    <fieldset class="form-group">
+      <mat-form-field>
+        <input 
+          class="form-control"
+          formControlName="dob"
+          matInput [matDatepicker]="picker" placeholder="Date of Birth" [(ngModel)]="dob">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <br>
+    </fieldset>
+
+    <fieldset class="form-group">
+
+    <mat-form-field class="example-full-width">
+            <input 
+            class="form-control"
+            formControlName="blood_grp"
+            matInput placeholder="Blood Group" [(ngModel)]="blood_grp" name="blood_grp" required>
+          </mat-form-field>
+          <br>
+    </fieldset>
+        
+    <fieldset class="form-group">
+
+      <mat-form-field>
+      <mat-label>Gender</mat-label>
+      <mat-select class="form-control" formControlName="gender" [(value)]="gender">
+        <mat-option value="M">Male</mat-option>
+        <mat-option value="F">Female</mat-option>
+        <mat-option value="O">Others</mat-option>
+      </mat-select> 
+      </mat-form-field> 
+      <br>
+    </fieldset>
+    
+    <fieldset class="form-group">
+
+    <mat-form-field class="example-full-width">
+      <input 
+      class="form-control"
+      formControlName="height"
+      matInput placeholder="Height" [(ngModel)]="height" name="height" required>
+    </mat-form-field>
+    <br>
+  </fieldset>
+
+
+  <fieldset>
+    <mat-form-field class="example-full-width">
+      <input 
+      class="form-control"
+      formControlName="weight"
+      matInput placeholder="Weight" [(ngModel)]="weight" name="weight" required>
+    </mat-form-field>
+    <br>
+  </fieldset>
+
+  </form>
+</mat-card-content>

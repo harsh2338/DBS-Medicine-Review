@@ -12,17 +12,26 @@ export class UserService {
     username:'',
     email:'',
     password:'',
+    name:'',
+    dob:new Date,
+    ph_number:'',
+    blood_grp:'',
+    gender:'',
+    height:0.0,
+    weight:0.0
   }
+  
 
   noAuthHeader = {headers: new HttpHeaders({'NoAuth':'True'})};
 
   constructor(private http:HttpClient) { }
   registerUser(user : User){
+    console.log("DJGRILEJGDSILGJE")
      return this.http.post(environment.apiBaseUrl+'/register',user,this.noAuthHeader)
   }
 
   login(authcreds){
-    return this.http.post(environment.apiBaseUrl+'/authenticate',authcreds,this.noAuthHeader)
+    return this.http.post(environment.apiBaseUrl+'/login',authcreds,this.noAuthHeader)
   }
 
   getUserProfile(){
