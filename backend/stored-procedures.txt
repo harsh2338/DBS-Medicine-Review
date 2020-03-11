@@ -1,0 +1,42 @@
+// get_user(username)
+
+create procedure get_user(username varchar(20))
+begin
+select * from users
+where name like username;
+end 
+
+// get_user_fam(uname)
+
+create procedure get_user_fam(username varchar(20))
+begin+
+select A.name, B.name, relationship from users.A, users.B
+inner join family
+where username like uname;
+end 
+
+// get_list()
+
+create procedure get_list()
+begin
+select * from users;
+end 
+
+// register(name, mail, pass, uname, ph number, blodd, dob, height, weight, gender, role)
+
+create procedure register(nm varchar(32), mail varchar(32), pword varchar(32), uname varchar(32), ph varchar(32), bld_grp varchar(10), db date, ht float, wt float, gender varchar(3), user_role varchar(10))
+begin
+insert into users(name, email, password, username, ph_number, blood_grp, dob, height, weight, gender, user_role) values(nm, mail, pword, uname, ph, bld_grp, db, ht, wt, gender, user_role);
+end //
+
+// search(name)
+
+create procedure search(drugName varchar(20))
+begin
+select * from drugs
+where name regexp concat(drugName, '+');
+end
+
+// add_family(member_id, relationship)
+
+

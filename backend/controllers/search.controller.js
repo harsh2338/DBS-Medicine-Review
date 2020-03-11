@@ -10,9 +10,46 @@ searchCon.search = (req, res, next) => {
 
     db.query(query, true, (err, results, fields) => {
         if(err){
-            res.json({message: 'Error '+ err});
+            res.status(404).json({message: 'Error '+ err});
         } else {
-            res.json(results[0]);
+            res.status(200).send(
+                results[0].map(item => {
+                    return item.name
+                })
+            );
+        }
+    });
+};
+
+searchCon.get_drug = (req, res, next) => {
+    var query = `CALL get_drug('${req.query.name}')`;
+    //var query = `select drugs.*, comments.comment_desc, users.username from comments inner join drugs on drugs.id = comments.did inner join users on users.id = comments.uid where drugs.name = '${req.query.name}';`
+
+    db.query(query, true, (err, results, fields) => {
+        if(err){
+            res.status(404).json({message: 'Error '+ err});
+        } else {
+
+            var drug = {};
+            var comment_entry = [];
+            results.forEach((element, ind) => {
+                comment_entry[ind] = {
+                    name : element.username,
+                    comment : element.comment_desc
+                }
+            });
+
+            drug = {
+                name : results[0].name,
+                description : results[0].description,
+                dosage : results[0].dosage,
+                ratings : results[0].ratings,
+                comments : comment_entry
+            }
+
+            res.status(200).send(
+                drug
+            )
         }
     });
 };

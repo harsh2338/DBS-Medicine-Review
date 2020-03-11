@@ -5,5 +5,7 @@ var conn = mysql.createConnection(config.db);
 
 conn.connect((err) => {
     if (err) throw err;
-    console.log("connected");
+    console.log("Connected to the database");
 });
+
+module.exports = conn;

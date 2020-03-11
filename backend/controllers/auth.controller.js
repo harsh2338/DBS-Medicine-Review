@@ -13,8 +13,45 @@ authCon.register = (req, res, next) => {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
-    var query = `CALL register2('${username}', '${email}' ,'${password}')`;
+    var blood_grp = req.body.blood_grp;
+    var name = req.body.name;
+    var ph_number = req.body.ph_number;
+    var dob = req.body.dob;
+    var height = req.body.height;
+    var weight = req.body.weight;
+    var gender = req.body.gender;
+    //var user_role = req.body.user_role;
 
+    var query = `CALL register('${name}', '${email}' ,'${password}', '${username}', '${ph_number}', '${blood_grp}','${dob}', '${height}', '${weight}', '${gender}', 'user')`;
+
+    console.log(query)
+    db.query(query, true, (err, results, fields) => {
+        if( err ){
+            console.error(err);
+            res.status(403).json({message: 'failure'+err});
+        } else {
+            res.json({message: 'success'});
+            console.log(`Added user ${username} to database`);
+        }
+    });
+};
+
+authCon.register_pharma = (req, res, next) => {
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
+    var blood_grp = req.body.blood_grp;
+    var name = req.body.name;
+    var ph_number = req.body.ph_number;
+    var dob = req.body.dob;
+    var height = req.body.height;
+    var weight = req.body.weight;
+    var gender = req.body.gender;
+    //var user_role = req.body.user_role;
+
+    var query = `CALL register('${name}', '${email}' ,'${password}', '${username}', '${ph_number}', '${blood_grp}','${dob}', '${height}', '${weight}', '${gender}', 'pharmacist')`;
+
+    console.log(query)
     db.query(query, true, (err, results, fields) => {
         if( err ){
             console.error(err);
@@ -29,26 +66,29 @@ authCon.register = (req, res, next) => {
 authCon.authenticate = (req, res, next) => {
     var username = req.body.username;
     var password = req.body.password;
+    //console.log(username, password);
 
-    var search_user = `SELECT * from shin_user WHERE username = '${username}' LIMIT 1`;
+    var search_user = `SELECT * from users WHERE username = '${username}'`;
 
     db.query(search_user, true, (err, results, fields) => {
+        //console.log(results);
         if( err ){
             console.error(err);
-            res.status(403).json({message: 'failure'+err});
+            res.status(404).json({message: 'failure'+err});
         } else {
             if (results.length == 0){
                 res.json({message: 'User not present. Check entered username'});
             } else {
+                //console.log(results);
                 var auth = authCon.comparePasswords(password, results[0].password);
                 if(auth){
                     var token = jwt.sign(
-                        {username: this.username},
+                        {username: username, user_role: results[0].user_role},
                         config.keys.secret,
                         {expiresIn: '30m'}
                     );
 
-                    res.json({ success: true, token: 'JWT ' + token });
+                    res.status(200).json({ success: true, token: 'JWT ' + token });
                 } else {
                     res.status(404).json({ message: 'Login failed!' });
                 }
