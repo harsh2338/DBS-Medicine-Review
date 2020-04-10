@@ -40,3 +40,346 @@ end
 // add_family(member_id, relationship)
 
 
+
+
+
+  
+................................................................................
+
+//COMMENTS
+
+//add_comment
+eg call add_comment(5,3,"Hello");
+
+delimiter $$
+create procedure add_comment(drugid int,userid int,comment_description varchar(255))
+begin
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+insert into comments(did,uid,comment_desc) values(drugid,userid,comment_description);
+commit;
+end$$
+delimiter ;
+
+//get_comments
+create procedure get_comments(drugid int)
+begin
+select * from comments where did=drugid;
+end
+
+..............................................................................
+//RATINGS
+
+
+//trigger for calculation of avg rating and increasing number of ratings
+
+delimiter $$
+create trigger update_rating before update on drugs for each row begin set @old_avg=(select avg_rating from drugs where id=NEW.id); set @old_num=(select num_of_ratings from drugs where id=NEW.id); set NEW.avg_rating=(@old_avg*@old_num+NEW.avg_rating)/(@old_num+1); set NEW.num_of_ratings=@old_num+1; end$$
+delimiter ;
+
+delimiter $$
+create procedure add_rating(rating float,drug_id int)
+begin
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+update drugs set avg_rating=rating where id=drug_id;
+commit;
+end$$
+delimiter ;
+
+..................................................................................
+//Add Disease:
+
+(tables to be modified:
+	diseases
+	treatment
+	disease_authors
+)
+
+	name
+	description
+	treated by drugid(search drug autocomplete)
+
+	added_by userid
+
+
+delimiter $$
+create procedure insert_disease_treated_by(
+disid int ,
+drug_id_list longtext
+)
+begin 
+declare did int ;
+declare dlen int ;
+declare didstring text;
+iterator: 
+LOOP 
+IF length(trim(drug_id_list)) = 0 or drug_id_list is null 
+then 
+LEAVE iterator; 
+END IF; 
+set didstring = substring_index(drug_id_list,',',1); 
+set dlen=length(didstring); 
+set did=convert(trim(didstring),unsigned integer); 
+insert into treatment(disid,drugid) values(disid,did); 
+set drug_id_list=insert(drug_id_list,1,dlen+1,''); 
+END LOOP; 
+END$$
+delimiter ;
+
+
+
+delimiter $$
+create procedure add_disease(
+name varchar(255),	
+description varchar(255),
+drug_id_list longtext,
+user_added int
+)
+begin
+declare disease_id int; 
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+insert into diseases(name,description) values(name,description);
+set disease_id=last_insert_id();
+insert into disease_authors(disid,uid) values(disease_id,user_added);
+call insert_disease_treated_by(disease_id,drug_id_list);
+commit;
+end
+$$
+delimiter ;
+
+
+..................................................................................
+
+Make profile
+
+	username
+	password
+
+	email
+	phone
+
+	role
+
+	Name
+	gender
+	dob
+	blood group
+	weight
+	height
+
+	has disease
+
+	under medication
+
+//Create User
+
+delimiter $$
+create procedure register_user(nm varchar(32), mail varchar(32), pword varchar(32), uname varchar(32), ph varchar(32), bld_grp varchar(10), db date, ht float, wt float, gender varchar(3), user_role varchar(10))
+begin
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+insert into users(name, email, password, username, ph_number, blood_grp, dob, height, weight, gender, user_role) values(nm, mail, pword, uname, ph, bld_grp, db, ht, wt, gender, user_role);
+commit;
+end$$
+delimiter ;
+
+//Add users medication
+
+delimiter $$
+create procedure add_medication(
+uid int ,
+drug_id_list longtext
+)
+begin
+declare did int ;
+declare dlen int ;
+declare didstring text;
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+iterator: 
+LOOP 
+IF length(trim(drug_id_list)) = 0 or drug_id_list is null 
+then 
+LEAVE iterator; 
+END IF; 
+set didstring = substring_index(drug_id_list,',',1); 
+set dlen=length(didstring); 
+set did=convert(trim(didstring),unsigned integer); 
+insert into medication(uid,drugid) values(uid,did); 
+set drug_id_list=insert(drug_id_list,1,dlen+1,''); 
+END LOOP; 
+commit;
+end 
+$$
+delimiter ;
+
+//Add patient
+
+delimiter $$
+create procedure add_patient(
+uid int ,
+disease_id_list longtext
+)
+begin
+declare did int ;
+declare dlen int ;
+declare didstring text;
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+iterator: 
+LOOP 
+IF length(trim(disease_id_list)) = 0 or disease_id_list is null 
+then 
+LEAVE iterator; 
+END IF; 
+set didstring = substring_index(disease_id_list,',',1); 
+set dlen=length(didstring); 
+set did=convert(trim(didstring),unsigned integer); 
+insert into patient(uid,disid) values(uid,did); 
+set disease_id_list=insert(disease_id_list,1,dlen+1,''); 
+END LOOP; 
+commit;
+end 
+$$
+delimiter ;
+
+//Add Family:
+delimiter $$
+create procedure add_family(headid int,uid int)
+begin
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+insert into family(member_id,head_id) values(uid,headid);
+commit;
+end$$
+delimiter ;
+
+..................................................................................
+
+Add Drug
+
+eg call add_drug('cal','ointment','always','1,2','1,5',4);
+
+(tables to be modified:
+	drug_authors
+	drugs
+	similar_drugs
+	treatment
+)
+name
+description 
+dosage
+similar to(search for other drugs)(2 way)
+cures disease(2 way)
+added by
+
+after insertion
+
+ratings-done
+comments
+
+
+delimiter $$
+create procedure insert_drug_cures(
+drug_id int ,
+disease_id_list longtext
+)
+begin 
+declare did int ;
+declare dlen int ;
+declare didstring text;
+iterator: 
+LOOP 
+IF length(trim(disease_id_list)) = 0 or disease_id_list is null 
+then 
+LEAVE iterator; 
+END IF; 
+set didstring = substring_index(disease_id_list,',',1); 
+set dlen=length(didstring); 
+set did=convert(trim(didstring),unsigned integer); 
+insert into treatment(disid,drugid) values(did,drug_id); 
+set disease_id_list=insert(disease_id_list,1,dlen+1,''); 
+END LOOP; 
+END$$
+delimiter ;
+
+delimiter $$
+create procedure insert_similar_drugs(
+drug_id1 int ,
+drug_id_list longtext
+)
+begin 
+declare did int ;
+declare dlen int ;
+declare didstring text;
+iterator: 
+LOOP 
+IF length(trim(drug_id_list)) = 0 or drug_id_list is null 
+then 
+LEAVE iterator; 
+END IF; 
+set didstring = substring_index(drug_id_list,',',1); 
+set dlen=length(didstring); 
+set did=convert(trim(didstring),unsigned integer); 
+insert into similar_drugs(did,similar_to_id) values(drug_id1,did); 
+set drug_id_list=insert(drug_id_list,1,dlen+1,''); 
+END LOOP; 
+END$$
+delimiter ;
+
+delimiter $$
+create procedure add_drug(
+name varchar(255),
+description varchar(255),
+dosage varchar(255),
+disease_id_list longtext,
+drug_id_list longtext,
+user_added int
+)
+begin	
+declare drug_id int; 
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+insert into drugs(name,description,dosage) values(name,description,dosage);
+set drug_id=last_insert_id();
+insert into drug_authors(did,uid) values(drug_id,user_added);
+call insert_drug_cures(drug_id,disease_id_list);
+call insert_similar_drugs(drug_id,drug_id_list);
+commit;
+end
+$$
+delimiter ;
