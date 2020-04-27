@@ -1,8 +1,11 @@
 <template>
-  <input 
-  type="text"
-  v-bind:class="classObj"
-  v-bind:placeholder="placeholderObj"/>
+  <input
+    type="text"
+    v-bind:class="classObj"
+    v-bind:placeholder="placeholderObj"
+    v-on:input="updateValue($event.target.value)"
+    v-on:keyup="signalChange()"
+  />
 </template>
 
 <script>
@@ -10,25 +13,28 @@ export default {
   props: {
     id: {
       type: String,
-      default: ""
+      default: "",
     },
     placeholder: {
       type: String,
-      default: ""
+      default: "",
     },
     classObj: {
       type: String,
-      default: "home-search"
+      default: "home-search",
     },
     placeholderObj: {
       type: String,
-      default: "Enter the name of the drug"
-    }
+      default: "Enter the name of the drug",
+    },
   },
   methods: {
     updateValue: function(value) {
-      this.$emit('input',value)
-    }
+      this.$emit("input", value);
+    },
+    signalChange: function(event) {
+      this.$emit("change", event);
+    },
   },
 };
 </script>
@@ -44,4 +50,3 @@ export default {
   margin: 10px;
 }
 </style>
-

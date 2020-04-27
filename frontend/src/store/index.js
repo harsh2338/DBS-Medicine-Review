@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     token: localStorage.getItem("access_token") || null,
     user: {},
+    drugs: [],
   },
   getters: {
     loggedIn(state) {
@@ -17,7 +18,12 @@ export default new Vuex.Store({
     getUser(state) {
       return state.user;
     },
+
+    getDrugs(state) {
+      return state.drugs;
+    }
   },
+  
   mutations: {
     retrieveToken(state, token) {
       state.token = token;
@@ -30,7 +36,12 @@ export default new Vuex.Store({
     addUserData(state, user) {
       state.user = user;
     },
+
+    addDrugData(state, drugs) {
+      state.drugs = drugs;
+    }
   },
+
   actions: {
     retrieveToken(context, credentials) {
       return new Promise((resolve, reject) => {
@@ -100,6 +111,22 @@ export default new Vuex.Store({
           })
           .then(function(response) {
             console.log(response);
+            resolve(response);
+          })
+          .catch(function(error) {
+            console.log(error);
+            reject(error);
+          });
+      });
+    },
+
+    getDrugsApi(context, drugName) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/search?name=${drugName}`, {})
+          .then(function(response) {
+            console.log(response);
+            context.commit("addDrugData", response.data);
             resolve(response);
           })
           .catch(function(error) {
