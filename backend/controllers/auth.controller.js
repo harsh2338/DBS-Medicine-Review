@@ -10,6 +10,7 @@ var jwt = require('jsonwebtoken'),
 var authCon = {};
 
 authCon.register = (req, res, next) => {
+    console.log(req.body.username);
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
@@ -20,9 +21,11 @@ authCon.register = (req, res, next) => {
     var height = req.body.height;
     var weight = req.body.weight;
     var gender = req.body.gender;
-    //var user_role = req.body.user_role;
+    // var user_role = req.body.user_role;
 
-    var query = `CALL register('${name}', '${email}' ,'${password}', '${username}', '${ph_number}', '${blood_grp}','${dob}', '${height}', '${weight}', '${gender}', 'user')`;
+    var query = `CALL register_user('${name}', '${email}' ,'${password}', '${username}', '${ph_number}', '${blood_grp}','${dob}', '${height}', '${weight}', '${gender}', 'user')`;
+
+    //  var query = `CALL register_user('richard', 'rich@rich.com' ,'1234', 'rich', '7778889991', 'O-','2000-09-09', '6', '9', 'm', 'user')`;
 
     console.log(query)
     db.query(query, true, (err, results, fields) => {
@@ -37,6 +40,7 @@ authCon.register = (req, res, next) => {
 };
 
 authCon.register_pharma = (req, res, next) => {
+    console.log(req.body.username);
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
@@ -49,7 +53,7 @@ authCon.register_pharma = (req, res, next) => {
     var gender = req.body.gender;
     //var user_role = req.body.user_role;
 
-    var query = `CALL register('${name}', '${email}' ,'${password}', '${username}', '${ph_number}', '${blood_grp}','${dob}', '${height}', '${weight}', '${gender}', 'pharmacist')`;
+    var query = `CALL register_user('${name}', '${email}' ,'${password}', '${username}', '${ph_number}', '${blood_grp}','${dob}', '${height}', '${weight}', '${gender}', 'user')`;
 
     console.log(query)
     db.query(query, true, (err, results, fields) => {

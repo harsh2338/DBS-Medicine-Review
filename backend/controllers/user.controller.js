@@ -6,7 +6,6 @@ var userCon = {};
 
 userCon.get_user = (req, res, next) => {
     var query = `CALL get_user('${req.body.username}')`;
-
     db.query(query, true, (err, results, fields) => {
         if (err){
             res.status(404).json({message: 'Error retrieving record, check entered values' + err});
