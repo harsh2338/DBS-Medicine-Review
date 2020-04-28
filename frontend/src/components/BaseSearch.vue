@@ -40,13 +40,9 @@ export default {
 </script>
 
 <style scoped>
-.searchInput {
-  width: 100%;
-}
-
-.home-search {
-  width: 60%;
-  height: 50px;
-  margin: 10px;
-}
+ input {
+   height: 40px;
+   width: 60%;
+   padding-left: 8px;
+ }
 </style>

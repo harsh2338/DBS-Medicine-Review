@@ -24,22 +24,22 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  width: 60%;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  background: yellow;
-}
+  .card {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background: yellow;
+  }
 
-.title {
-  padding: 10px;
-}
-.description {
-  padding: 10px;
-}
-.rating {
-  padding: 10px;
-}
+  .title {
+    padding: 10px;
+  }
+  .description {
+    padding: 10px;
+  }
+  .rating {
+    padding: 10px;
+  }
 </style>

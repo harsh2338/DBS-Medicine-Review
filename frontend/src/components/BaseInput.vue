@@ -6,13 +6,6 @@
     v-bind:placeholder="placeholder" 
     :id="id" 
     v-on:input ="updateValue($event.target.value)"/> 
-    <!-- <b-col sm="3">
-      <b-form-input 
-      :type="type" 
-      :id="id" 
-      :placeholder="placeholder" 
-      v-on:input ="updateValue($event.target.value)"></b-form-input>
-    </b-col> -->
   </div>
 </template>
 

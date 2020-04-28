@@ -20,13 +20,13 @@ export default {
 }
 </script>
 <style scoped>
-.button {
-  background-color: green;
-  color: white;
-  width: 300px;
-  font-size: 16px;
-  margin: 10px;
-  padding: 5px;
-  border-radius: 5px;
-}
+  .button {
+    background-color: green;
+    color: white;
+    width: 300px;
+    font-size: 16px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+  }
 </style>

@@ -1,14 +1,15 @@
 <template>
   <div class="form">
-    <h1>Login</h1>
-    <BaseInput placeholder="Username or Email" type="text" v-model="username" />
-    <BaseInput placeholder="password" type="password" v-model="password" />
-    <BaseButton @performAction="performLogin">Login</BaseButton>
+      <h1>Login</h1>
+      
+      <BaseInput placeholder="Username or Email" type="text"     v-model="username" />
+      <BaseInput placeholder="password"          type="password" v-model="password" />
+      
+      <BaseButton @performAction="performLogin">Login</BaseButton>
   </div>
 </template>
 
 <script>
-// import axios from 'axios';
 
 export default {
   data() {
@@ -34,10 +35,15 @@ export default {
 </script>
 
 <style scoped>
-.form {
-  direction: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 auto;
+@import url('https://fonts.googleapis.com/css?family=Raleway|Roboto&display=swap');
+h1 {
+  font-family: Raleway, sans-serif;
 }
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
 </style>

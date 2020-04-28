@@ -6,15 +6,6 @@ import store from "./store";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 import { apiHost } from "../config/config";
-// import VueFlashMessage from 'vue-flash-message';
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
-
-// Vue.use(VueFlashMessage);
 
 axios.defaults.baseURL = apiHost;
 
