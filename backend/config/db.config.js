@@ -6,7 +6,7 @@ var config2 = module.exports;
 config.db = {
     user: 'root', 
     password: '',
-    name: 'sampledb'
+    name: 'original_medrev'
 };
 
 config.db.details = {
@@ -19,7 +19,7 @@ config2.db = {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'sampledb'
+    database: 'original_medrev'
 }
 
 config2.keys = {
