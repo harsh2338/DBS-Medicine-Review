@@ -25,4 +25,6 @@ router.get('/drug', searchCon.get_drug);
 
 router.post('/add-drug', check_user.checkRole, drugCon.add_drug);
 
+router.post('/drug', drugCon.add_comment);
+
 module.exports = router;
