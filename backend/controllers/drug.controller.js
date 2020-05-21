@@ -29,6 +29,23 @@ drugCon.add_drug = (req, res, next) => {
     });
 };
 
+drugCon.add_comment = (req, res, next) => {
+    var query = `CALL add_comment('${req.body.uid}','${req.body.did}','${req.body.comment_desc}')`;
+
+    db.query(query, true, (err, results) => {
+        if(err){
+            res.status(404).json({
+                message: 'Error encountered ' + err
+            });
+        } else {
+            res.status(200).json({
+                message: 'Successfully added comment to entry'
+            });
+        }
+    });
+
+};
+
 module.exports = drugCon;
 
 
