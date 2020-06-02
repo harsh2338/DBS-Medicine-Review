@@ -1,4 +1,4 @@
-# medicine-review-app
+# frontend
 
 ## Project setup
 ```

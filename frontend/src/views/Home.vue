@@ -1,62 +1,66 @@
 <template>
-<div class="container">
-    <div class="search">
-          <BaseSearch v-model="query" v-on:change="search" />
-          <div>
-            <ul>
-              <li v-for="(drug,index) in getDrugs" v-bind:key="index">{{drug}}</li>
-            </ul>
-          </div>
-      </div>
-</div>
+    <div id="home-page">
+    <div class="brand-banner">
+        <div class="brand-title">
+        <h1>MEDREV</h1>
+        <h2>A place to search Drugs</h2>
+        </div>
+    </div>
+            <SearchDrug/>
+    </div>
+
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
+import SearchDrug from '../components/SearchDrug';
 export default {
-  data() {
-    return {
-      query: "",
-      drugs: [],
-    };
-  },
-  methods: {
-    ...mapActions(["getDrugsApi"]),
-    search() {
-      this.getDrugsApi(this.query);
+    components: {
+        SearchDrug,
     },
-  },
-  computed: mapGetters(["getDrugs"]),
-};
+
+    computed: {
+        ...mapGetters(["isAuthenticated", "currentUser"])
+    }
+}
 </script>
-
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Raleway|Roboto&display=swap');
+    h1, h2 {
+        color: white;
+        font-family: 'Raleway', 'sans-serif';
+    }
 
-  .container {
-    text-align: center;
-    margin-top: 20px;
-  }
-  .search {
-    display: inline-block;
-    width: 100%;
-  }
+    .brand-banner {
+        padding-top: 2em;
+        padding-bottom: 2em;
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        background-image: url('../assets/pharmacy.jpeg');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        text-align: center;
+    }
 
-  li {
-    text-decoration: none;
-    list-style: none;
-    height: 40px;
-    font-family: Roboto, sans-serif;
-    padding-top: 10px;
-  }
+    .brand-title {
+        padding: 10px;
+        border-radius: 4px;
+        margin: 0 auto;
+    }
 
-  li:hover {
-    background: #ddd;
-  }
-  ul {
-    border: 1px solid gray;
-    width: 60.5%;
-    margin: 0 auto;
-    padding-inline-start: 0;
-  }
+    .brand-title > h1 {
+        font-size: 3em;
+    }
+
+    #home-page {
+        height: 100vh;
+        background: #a8ff78;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #78ffd6, #a8ff78);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #78ffd6, #a8ff78); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+    }
+
+
 </style>

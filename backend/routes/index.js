@@ -23,6 +23,10 @@ router.get('/search', searchCon.search);
 
 router.get('/drug', searchCon.get_drug);
 
+router.get('/drug/comments', searchCon.get_drug_comments)
+
 router.post('/add-drug', check_user.checkRole, drugCon.add_drug);
+
+router.post('/drug', drugCon.add_comment);
 
 module.exports = router;

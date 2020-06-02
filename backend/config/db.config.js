@@ -18,7 +18,7 @@ var config = module.exports;
 config.db = {
     host: 'localhost',
     user: 'root',
-    password: 'rootroot',
+    password: 'root',
     database: 'drugDB'
 }
 

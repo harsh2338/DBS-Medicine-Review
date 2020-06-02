@@ -81,7 +81,7 @@ authCon.authenticate = (req, res, next) => {
             res.status(404).json({message: 'failure'+err});
         } else {
             if (results.length == 0){
-                res.json({message: 'User not present. Check entered username'});
+                res.status(404).json({message: 'Check entered username'});
             } else {
                 //console.log(results);
                 var auth = authCon.comparePasswords(password, results[0].password);
