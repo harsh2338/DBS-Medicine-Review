@@ -1,8 +1,15 @@
+SHOW PROCEDURE STATUS 
+WHERE Db = DATABASE() AND Type = 'PROCEDURE'
+
+mysqldump  medrev2 --routines > original_medrev.sql
+
+
+
 // get_user(username)
 
 create procedure get_user(username varchar(20))
 begin
-select * from users
+select * from user_details
 where name like username;
 end 
 
@@ -460,7 +467,7 @@ end
 $$
 delimiter ;
 
-Get drug deatails;
+Get drug details;
 delimiter $$
 create procedure get_diseases_cured(
 drug_id int
@@ -479,8 +486,32 @@ end
 $$
 delimiter ;
 
+VIEW:
+create view user_details as
+    -> select id,name,email,username,ph_number,dob,height,weight,gender,user_role from users;
+
+
+Get user_details
+
+delimiter $$
+create procedure get_user(
+username varchar(20)
+)
+begin	
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+select * from user_details where name like username;
+
+commit;
+end
+$$
+delimiter ;
 
 
 
-
-
+INDEX:
+create index search_drug_index on drugs (name);

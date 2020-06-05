@@ -141,7 +141,8 @@ CREATE TABLE `drugs` (
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `avg_rating` float DEFAULT '0',
   `num_of_ratings` int(11) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `search_drug_index` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -302,6 +303,27 @@ LOCK TABLES `treatment` WRITE;
 INSERT INTO `treatment` VALUES (1,6),(2,6),(1,7),(1,8),(2,8),(1,9),(2,9),(1,10),(2,10);
 /*!40000 ALTER TABLE `treatment` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `user_details`
+--
+
+DROP TABLE IF EXISTS `user_details`;
+/*!50001 DROP VIEW IF EXISTS `user_details`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `user_details` AS SELECT 
+ 1 AS `id`,
+ 1 AS `name`,
+ 1 AS `email`,
+ 1 AS `username`,
+ 1 AS `ph_number`,
+ 1 AS `dob`,
+ 1 AS `height`,
+ 1 AS `weight`,
+ 1 AS `gender`,
+ 1 AS `user_role`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `users`
@@ -756,10 +778,19 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`laharish`@`localhost` PROCEDURE `get_user`(uname varchar(32))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user`(
+username varchar(20)
+)
 begin
-select * from users
-where username like uname;
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+        ROLLBACK;
+        SELECT 'An error has occurred, operation rollbacked and the stored procedure was terminated';
+END;
+start transaction;
+select * from user_details where name like username;
+
+commit;
 end ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -989,6 +1020,24 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Final view structure for view `user_details`
+--
+
+/*!50001 DROP VIEW IF EXISTS `user_details`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `user_details` AS select `users`.`id` AS `id`,`users`.`name` AS `name`,`users`.`email` AS `email`,`users`.`username` AS `username`,`users`.`ph_number` AS `ph_number`,`users`.`dob` AS `dob`,`users`.`height` AS `height`,`users`.`weight` AS `weight`,`users`.`gender` AS `gender`,`users`.`user_role` AS `user_role` from `users` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -999,4 +1048,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-21 13:45:58
+-- Dump completed on 2020-06-05 15:51:11
