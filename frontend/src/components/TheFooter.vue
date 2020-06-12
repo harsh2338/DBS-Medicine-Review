@@ -1,7 +1,7 @@
 <template>
   <footer>
     <router-link :to="{ name: 'home' }">MEDREV</router-link>
-    <span class="attribution">A learning project <strong>(WTA 254)</strong></span>
+    <span class="attribution">A learning project</span>
   </footer>
 </template>
 
