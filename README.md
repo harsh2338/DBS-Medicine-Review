@@ -1,4 +1,6 @@
-## Repo for the Database Course project for Spring 2020 in NITK, Surathkal by team Harshavardhan.
+## Medicine Review System
+![Preview of webpage](./front_page.png)
+![Entity Relation Diagram](./er.png)
 
 ## Installation Instructions
 Prerequisites: Nodejs, Mysql, Vuejs
